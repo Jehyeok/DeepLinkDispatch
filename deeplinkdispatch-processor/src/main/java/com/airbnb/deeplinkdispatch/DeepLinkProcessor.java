@@ -530,7 +530,7 @@ public class DeepLinkProcessor extends AbstractProcessor {
         .addStatement("newIntent.putExtra(DeepLink.IS_DEEP_LINK, true)")
         .addStatement("newIntent.putExtra(DeepLink.REFERRER_URI, uri)")
         .beginControlFlow("if (activity.getCallingActivity() != null)")
-        .addStatement("newIntent.setFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT)")
+        .addStatement("newIntent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT)")
         .endControlFlow()
         .beginControlFlow("if (taskStackBuilder != null)")
         .addStatement("taskStackBuilder.startActivities()")
