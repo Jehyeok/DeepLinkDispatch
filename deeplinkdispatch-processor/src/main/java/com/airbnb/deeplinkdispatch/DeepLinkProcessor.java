@@ -91,7 +91,7 @@ public class DeepLinkProcessor extends AbstractProcessor {
   private static final Class<DeepLink> DEEP_LINK_CLASS = DeepLink.class;
   private static final Class<DeepLinkSpec> DEEP_LINK_SPEC_CLASS = DeepLinkSpec.class;
 
-  private static final String PARAM_MAINTAIN_INTENT_FLAG = "PARAM_MAINTAIN_INTENT_FLAG";
+  private static final String PARAM_MAINTAIN_INTENT_FLAG_NAME = "PARAM_MAINTAIN_INTENT_FLAG";
 
   private Filer filer;
   private Messager messager;
@@ -389,6 +389,12 @@ public class DeepLinkProcessor extends AbstractProcessor {
             Modifier.FINAL)
         .build();
 
+    FieldSpec paramMaintainIntentFlag = FieldSpec
+        .builder(String.class, PARAM_MAINTAIN_INTENT_FLAG_NAME,
+                Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
+        .initializer(String.format("\"%s\"", PARAM_MAINTAIN_INTENT_FLAG_NAME))
+        .build();
+
     CodeBlock.Builder loadersInitializer = CodeBlock.builder()
         .add("this.loaders = $T.asList(\n", ClassName.get(Arrays.class))
         .indent();
@@ -532,7 +538,8 @@ public class DeepLinkProcessor extends AbstractProcessor {
         .addStatement("newIntent.putExtra(DeepLink.IS_DEEP_LINK, true)")
         .addStatement("newIntent.putExtra(DeepLink.REFERRER_URI, uri)")
         .beginControlFlow("if (activity.getCallingActivity() != null)")
-        .beginControlFlow("if (newIntent.getBooleanExtra(%s, false))", PARAM_MAINTAIN_INTENT_FLAG)
+        .beginControlFlow(String.format("if (newIntent.getBooleanExtra(%s, false))",
+                PARAM_MAINTAIN_INTENT_FLAG_NAME))
         .addStatement("newIntent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT)")
         .nextControlFlow("else")
         .addStatement("newIntent.setFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT)")
@@ -567,6 +574,7 @@ public class DeepLinkProcessor extends AbstractProcessor {
         .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
         .addField(tag)
         .addField(loaders)
+        .addField(paramMaintainIntentFlag)
         .addMethod(constructor)
         .addMethod(findEntry)
         .addMethod(dispatchFromMethod)

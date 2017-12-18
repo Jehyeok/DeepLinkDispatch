@@ -26,6 +26,8 @@ import java.util.Map;
 public final class DeepLinkDelegate {
   private static final String TAG = DeepLinkDelegate.class.getSimpleName();
 
+  private static final String PARAM_MAINTAIN_INTENT_FLAG = "PARAM_MAINTAIN_INTENT_FLAG";
+
   private final List<? extends Parser> loaders;
 
   public DeepLinkDelegate(SampleModuleLoader sampleModuleLoader) {
@@ -126,7 +128,11 @@ public final class DeepLinkDelegate {
         newIntent.putExtra(DeepLink.IS_DEEP_LINK, true);
         newIntent.putExtra(DeepLink.REFERRER_URI, uri);
         if (activity.getCallingActivity() != null) {
-          newIntent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
+          if (newIntent.getBooleanExtra(PARAM_MAINTAIN_INTENT_FLAG, false)) {
+            newIntent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
+          } else {
+            newIntent.setFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
+          }
         }
         if (taskStackBuilder != null) {
           taskStackBuilder.startActivities();
