@@ -91,6 +91,8 @@ public class DeepLinkProcessor extends AbstractProcessor {
   private static final Class<DeepLink> DEEP_LINK_CLASS = DeepLink.class;
   private static final Class<DeepLinkSpec> DEEP_LINK_SPEC_CLASS = DeepLinkSpec.class;
 
+  private static final String PARAM_MAINTAIN_INTENT_FLAG = "PARAM_MAINTAIN_INTENT_FLAG";
+
   private Filer filer;
   private Messager messager;
   private Documentor documentor;
@@ -530,7 +532,11 @@ public class DeepLinkProcessor extends AbstractProcessor {
         .addStatement("newIntent.putExtra(DeepLink.IS_DEEP_LINK, true)")
         .addStatement("newIntent.putExtra(DeepLink.REFERRER_URI, uri)")
         .beginControlFlow("if (activity.getCallingActivity() != null)")
+        .beginControlFlow("if (newIntent.getBooleanExtra(%s, false))", PARAM_MAINTAIN_INTENT_FLAG)
         .addStatement("newIntent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT)")
+        .nextControlFlow("else")
+        .addStatement("newIntent.setFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT)")
+        .endControlFlow()
         .endControlFlow()
         .beginControlFlow("if (taskStackBuilder != null)")
         .addStatement("taskStackBuilder.startActivities()")
