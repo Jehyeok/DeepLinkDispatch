@@ -126,7 +126,7 @@ public final class DeepLinkDelegate {
         newIntent.putExtra(DeepLink.IS_DEEP_LINK, true);
         newIntent.putExtra(DeepLink.REFERRER_URI, uri);
         if (activity.getCallingActivity() != null) {
-          newIntent.setFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
+          newIntent.addFlags(Intent.FLAG_ACTIVITY_FORWARD_RESULT);
         }
         if (taskStackBuilder != null) {
           taskStackBuilder.startActivities();
