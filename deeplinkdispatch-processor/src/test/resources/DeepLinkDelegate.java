@@ -26,7 +26,7 @@ import java.util.Map;
 public final class DeepLinkDelegate {
   private static final String TAG = DeepLinkDelegate.class.getSimpleName();
 
-  private static final String PARAM_MAINTAIN_INTENT_FLAG = "PARAM_MAINTAIN_INTENT_FLAG";
+  public static final String PARAM_MAINTAIN_INTENT_FLAG = "PARAM_MAINTAIN_INTENT_FLAG";
 
   private final List<? extends Parser> loaders;
 

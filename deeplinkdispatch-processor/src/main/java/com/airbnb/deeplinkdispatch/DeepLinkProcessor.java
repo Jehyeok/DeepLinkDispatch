@@ -391,7 +391,7 @@ public class DeepLinkProcessor extends AbstractProcessor {
 
     FieldSpec paramMaintainIntentFlag = FieldSpec
         .builder(String.class, PARAM_MAINTAIN_INTENT_FLAG_NAME,
-                Modifier.PRIVATE, Modifier.STATIC, Modifier.FINAL)
+                Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL)
         .initializer(String.format("\"%s\"", PARAM_MAINTAIN_INTENT_FLAG_NAME))
         .build();
 
